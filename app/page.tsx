@@ -1,9 +1,11 @@
 "use client";
-import { useState } from "react";
-import { Button, Form, Panel, Input, InputGroup } from "rsuite";
+import { Form, Panel, Input, Button, InputGroup } from "rsuite";
 import { useAuth } from "./authContext";
+import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 import EyeCloseIcon from "@rsuite/icons/EyeClose";
 import VisibleIcon from "@rsuite/icons/Visible";
+
 const styles = {
   width: "100%",
 };
@@ -14,16 +16,19 @@ interface formValueType {
 }
 export default function Home() {
   const { userLogin } = useAuth();
+
+  const defaultValues = { email: "", password: "" };
+  const { control, handleSubmit } = useForm({ defaultValues });
+
   const [visible, setVisible] = useState(false);
 
   const handleChange = () => {
     setVisible(!visible);
   };
-  const [formValue, setFormValue] = useState<formValueType>({
-    email: "user@user.com",
-    password: "password",
-  });
 
+  async function onSubmit(formValue: formValueType) {
+    console.log(formValue);
+  }
   return (
     <div
       style={{
@@ -48,40 +53,40 @@ export default function Home() {
           borderRadius: 8,
         }}
       >
-        <Form
-          layout="vertical"
-          formValue={formValue}
-          onChange={(formValue: Record<string, any>) => {
-            const typedFormValue = formValue as formValueType;
-            setFormValue(typedFormValue);
-          }}
-          onSubmit={async () => await userLogin(formValue)}
-        >
-          <Form.Group controlId="email">
-            <Form.ControlLabel>email</Form.ControlLabel>
-            <Form.Control name="email" style={{ width: "215%" }} />
-            <Form.HelpText tooltip>Required</Form.HelpText>
-          </Form.Group>
-
-          <Form.Group controlId="password">
-            <Form.ControlLabel>Password</Form.ControlLabel>
-            <InputGroup inside style={{ width: "100%" }}>
+        <Form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
               <Input
-                type={visible ? "text" : "password"}
-                name="password"
-                value={formValue.password}
-                onChange={(value) =>
-                  setFormValue({ ...formValue, password: value })
-                }
+                id={field.name}
+                value={field.value}
+                onChange={(value) => field.onChange(value)}
+                placeholder="email"
               />
-              <InputGroup.Button onClick={handleChange}>
-                {visible ? <VisibleIcon /> : <EyeCloseIcon />}
-              </InputGroup.Button>
-            </InputGroup>
-          </Form.Group>
+            )}
+          />
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <InputGroup inside style={styles}>
+                <Input
+                  type={visible ? "text" : "password"}
+                  id={field.name}
+                  value={field.value}
+                  onChange={(value) => field.onChange(value)}
+                  placeholder="senha"
+                />
+                <InputGroup.Button onClick={handleChange}>
+                  {visible ? <VisibleIcon /> : <EyeCloseIcon />}
+                </InputGroup.Button>
+              </InputGroup>
+            )}
+          />
 
-          <Button type="submit" style={{ width: "100%", marginTop: 20 }}>
-            Login
+          <Button appearance="primary" type="submit">
+            Entrar
           </Button>
         </Form>
       </Panel>
