@@ -1,5 +1,6 @@
 "use client";
 import axios, { AxiosInstance } from "axios";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -8,8 +9,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useRouter } from "next/navigation";
-import { ThreeDot } from "react-loading-indicators";
 interface authProviderProps {
   children: ReactNode;
 }
@@ -28,23 +27,10 @@ interface AuthContextType {
   userLogin: (loginForm: LoginForm) => Promise<void>;
   userLogout: () => Promise<void>;
   api: AxiosInstance;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
-
-const Load = () => {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <ThreeDot
-        variant="bob"
-        color="#32cd32"
-        size="large"
-        text=""
-        textColor=""
-      />
-    </div>
-  );
-};
 
 export const AuthProvider = ({ children }: authProviderProps) => {
   const router = useRouter();
@@ -96,8 +82,8 @@ export const AuthProvider = ({ children }: authProviderProps) => {
     setAuthHeader();
   }, [setAuthHeader]);
   return (
-    <AuthContext.Provider value={{ userLogin, userLogout, api }}>
-      {isLoading ? <Load /> : children}
+    <AuthContext.Provider value={{ userLogin, userLogout, api, isLoading }}>
+      {children}
     </AuthContext.Provider>
   );
 };
