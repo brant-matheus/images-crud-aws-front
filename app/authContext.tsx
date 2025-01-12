@@ -9,6 +9,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useToast } from "./toastContext";
 interface authProviderProps {
   children: ReactNode;
 }
@@ -16,11 +17,6 @@ interface authProviderProps {
 interface LoginForm {
   email: string;
   password: string;
-}
-
-interface UserLoginResponse {
-  token: any;
-  user: any;
 }
 
 interface AuthContextType {
@@ -33,6 +29,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: authProviderProps) => {
+  const { pushToast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const apiKey = process.env.NEXT_PUBLIC_API_URL;
@@ -60,9 +57,16 @@ export const AuthProvider = ({ children }: authProviderProps) => {
       localStorage.setItem("token", token.token);
       localStorage.setItem("user", JSON.stringify(user));
       setAuthHeader();
+      pushToast({
+        text: "Login efetuado com sucesso",
+        type: "success",
+      });
       router.push("/images");
     } catch (error) {
-      console.log(error);
+      pushToast({
+        text: "Falha ao logar",
+        type: "error",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -71,9 +75,14 @@ export const AuthProvider = ({ children }: authProviderProps) => {
   async function userLogout() {
     try {
       await api.post("/logout");
+      pushToast({
+        text: "Logout efetuado com sucesso",
+        type: "success",
+      });
     } catch (error) {
     } finally {
       localStorage.clear();
+
       router.push("/");
     }
   }
