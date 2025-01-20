@@ -13,6 +13,7 @@ import { useToast } from "./toastContext";
 interface authProviderProps {
   children: ReactNode;
 }
+export type UserType = { email: string; fullName: string; avatar: string };
 
 interface LoginForm {
   email: string;

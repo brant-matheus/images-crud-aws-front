@@ -1,13 +1,13 @@
 "use client";
-import { Form, Panel, Input, Button, InputGroup } from "rsuite";
-import { useAuth } from "./authContext";
-import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import EyeCloseIcon from "@rsuite/icons/EyeClose";
 import VisibleIcon from "@rsuite/icons/Visible";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Button, Form, Input, InputGroup, Panel } from "rsuite";
 import * as Yup from "yup";
-import { register } from "module";
+import { useAuth } from "./context/authContext";
+import { useRouter } from "next/navigation";
 const styles = {
   width: "100%",
 };
@@ -42,6 +42,8 @@ export default function Home() {
   async function onSubmit(formValue: formValueType) {
     await userLogin(formValue);
   }
+
+  const router = useRouter();
   return (
     <div className="h-full w-full dark:bg-[#9bceff]">
       <div className="flex justify-center items-center h-screen">
@@ -59,7 +61,7 @@ export default function Home() {
             backgroundColor: "#ffff",
           }}
         >
-          <Form onSubmit={handleSubmit(onSubmit)} className="grid gap-0">
+          <Form onSubmit={handleSubmit(onSubmit)} fluid>
             <Controller
               name="email"
               control={control}
