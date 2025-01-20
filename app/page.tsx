@@ -113,7 +113,12 @@ export default function Home() {
                 </Form.Group>
               )}
             />
-            <Button appearance="primary" type="submit" loading={isLoading}>
+            <Button
+              appearance="primary"
+              type="submit"
+              loading={isLoading}
+              className="w-full"
+            >
               Entrar
             </Button>
           </Form>

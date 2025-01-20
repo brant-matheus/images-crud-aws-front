@@ -8,7 +8,13 @@ interface AvatarProps {
 const avatarPlacerholder = "https://avatar.iran.liara.run/public";
 
 const renderToggle = (props: any, user: UserType) => (
-  <Avatar circle {...props} src={(user && user.avatar) ?? avatarPlacerholder} />
+  <Avatar
+    color="cyan"
+    bordered
+    circle
+    {...props}
+    src={(user && user.avatar) ?? avatarPlacerholder}
+  />
 );
 
 export default function AvatarElement({ user }: AvatarProps) {

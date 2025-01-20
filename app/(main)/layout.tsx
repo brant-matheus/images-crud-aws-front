@@ -78,9 +78,12 @@ export default function DashboardLayout({
       </Sidebar>
 
       <Container>
-        <Header className="page-header flex justify-between ">
-          <NavToggle expand={expand} onChange={() => setExpand(!expand)} />
-          <div className="mr-5">
+        <Header className="page-header flex justify-between h-16">
+          <div className="flex items-start">
+            <NavToggle expand={expand} onChange={() => setExpand(!expand)} />
+          </div>
+
+          <div className="flex items-center mr-5">
             <AvatarElement user={user!} />
           </div>
         </Header>
