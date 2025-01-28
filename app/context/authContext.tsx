@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { useToast } from "./toastContext";
+import { getLocalStorageData } from "@/utils/getLocalStorageData";
 interface authProviderProps {
   children: ReactNode;
 }
@@ -39,12 +40,8 @@ export const AuthProvider = ({ children }: authProviderProps) => {
     baseURL: apiKey,
   });
 
-  const getToken = () => {
-    return localStorage.getItem("token");
-  };
-
   const setAuthHeader = useCallback(() => {
-    const token = getToken();
+    const { token } = getLocalStorageData();
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }

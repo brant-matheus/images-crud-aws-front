@@ -59,7 +59,7 @@ export const ToastProvider = ({ children }: ToastContextProps) => {
 
   useEffect(() => {
     const message = (
-      <Notification type={toastProps.type} header={header + "!"}>
+      <Notification type={toastProps.type} header={header + "!"} closable>
         <p>{toastProps.text}</p>
       </Notification>
     );
